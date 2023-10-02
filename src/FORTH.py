@@ -2,12 +2,21 @@
 #
 #   forth.py
 #
+#   Copyright © 2021 Chris Meyers and Fred Obermann
+#   http://openbookproject.net/py4fun/forth/forth.html
+#
+#   2023, Modified by Darren Hosking, aka. Calculator Clique
+#   Ported to HP Prime, Added many words (math, graphics,...)
+#   License added.
+#   See:
+#   - [diemheych/PrimeFORTH: A simple version of FORTH written in Python for the HP Prime calculator](https://github.com/diemheych/PrimeFORTH)
+#   - [HP Prime runs FORTH in Python - YouTube](https://www.youtube.com/watch?v=ILMbia3-VZo)
+#
+
 import sys, math
 import hpprime
 import graphic
 import urandom
-
-if sys.version > '3' : raw_input = input  # for both 2.7 and 3.0+
 
 ds       = []          # The data stack
 cStack   = []          # The control struct stack
@@ -16,10 +25,10 @@ heapNext =  0          # Next avail slot in heap
 words    = []          # The input stream of tokens
 colour   = 0x0000ff
 background = 0xffffff
-initCode = """: cr 10 emit ; : abs dup 0 < if 0 swap - then ; : constant create , does> @ ; : variable create 1 allot ; : +! DUP @ ROT + SWAP ! ; 
-: 2DUP OVER OVER ; : 2DROP DROP DROP ; : NIP SWAP DROP ; : 2NIP 2SWAP 2DROP ; : TUCK SWAP OVER ; 
+initCode = """: cr 10 emit ; : abs dup 0 < if 0 swap - then ; : constant create , does> @ ; : variable create 1 allot ; : +! DUP @ ROT + SWAP ! ;
+: 2DUP OVER OVER ; : 2DROP DROP DROP ; : NIP SWAP DROP ; : 2NIP 2SWAP 2DROP ; : TUCK SWAP OVER ;
  : BL 32 ; : CR 10 EMIT ; : SPACE BL EMIT ; : NEGATE 0 SWAP - ; : DNEGATE 0. 2SWAP D- ; : CELLS CELL * ; : TRUE -1 ; : FALSE 0 ;
- : 0= 0 = ; : 0< 0 < ; : 0> 0 > ; : <= > 0= ; : >= < 0= ; : 0<= 0 <= ; : 0>= 0 >= ; : 1- 1 - ; 
+ : 0= 0 = ; : 0< 0 < ; : 0> 0 > ; : <= > 0= ; : >= < 0= ; : 0<= 0 <= ; : 0>= 0 >= ; : 1- 1 - ;
 : 2+ 2 + ; : 2- 2 - ; : 2/ 2 / ; : 2* 2 * ; : MIN 2DUP < IF DROP ELSE NIP THEN ; : MAX 2DUP > IF DROP ELSE NIP THEN ; : D0= OR 0= ; 1 constant CELL
 """
 
@@ -32,21 +41,24 @@ def main() :
     while True :
         pcode = compile()          # compile/run from user
         if pcode == None : print(""); return
-        execute(pcode)
+        try:
+            execute(pcode)
+        except IndexError:
+            print("Stack empty")
 
 #============================== Lexical Parsing
-        
+
 def getWord (prompt="... ") :
     global words, initCode
-    while not words : 
+    while not words :
         try :
             if initCode : lin = initCode; initCode=""
-            else        : 
-                lin = raw_input(prompt)+" "
+            else        :
+                lin = input(prompt)+" "
                 print(lin)
         except : return None
         tokenizeWords(lin)
-        
+
     word = words[0]
     if word == "bye" : return None
     words = words[1:]
@@ -118,6 +130,8 @@ def rKey (cod,p) :
         if k != -1 : break
 
     ds.append(int(k))
+
+def rInt (cod,p) : ds.append(int(ds.pop()))
 def rTicks (cod,p) : ds.append(int(hpprime.eval("ticks")))
 def rLine (cod,p) : y2=ds.pop(); x2=ds.pop(); y1=ds.pop(); x1=ds.pop(); hpprime.line(0,x1,y1,x2, y2, colour)
 def rRect (cod,p) : h=ds.pop(); w=ds.pop(); y=ds.pop(); x=ds.pop(); hpprime.rect(0,x,y,w, h, colour)
@@ -127,9 +141,9 @@ def rCol (cod,p) : global colour ; colour = ds.pop()
 def rGetcol (cod,p) : global colour; ds.append(colour)
 def rBg (cod,p) : global background; background = ds.pop()
 def rShow (cod,p) : graphic.show()
-def rList (cod,p) : 
+def rList (cod,p) :
     fname = getWord()+".fth";
-    try: 
+    try:
         f = open(fname, "r")
         print(f.read(), end=''); f.close()
     except:
@@ -167,7 +181,7 @@ def rHere(cod,p) : ds.append(heapNext)
 def rJmp (cod,p) : return cod[p]
 def rJnz (cod,p) : return (cod[p],p+1)[ds.pop()]
 def rJz  (cod,p) : return (p+1,cod[p])[ds.pop()==0]
-def rRun (cod,p) : 
+def rRun (cod,p) :
     if cod[p] in rDict:
         execute(rDict[cod[p]])
     else:
@@ -223,7 +237,7 @@ def rImmediate(cod,p) :
     imDict[list(rDict.keys())[-1]] = 1
 
 def rWords(cod,p) :
-    for k in sorted(list(rDict.keys())): print(k,end=' ')
+    for k in sorted(list(rDict.keys())+list(cDict.keys())): print(k,end=' ')
 
 def rCreate (pcode,p) :
     global heapNext, lastCreate
@@ -266,6 +280,7 @@ rDict = {
 'getpix4' : rGetpix4,
 'key' : rKey,
 'lastkey' : rLastkey,
+'int' : rInt,
 'ticks' : rTicks,
 'line' : rLine,
 'rect' : rRect,
@@ -303,11 +318,23 @@ rDict = {
 'immediate' : rImmediate,
 'lte' : rLtE,
 }
-#================================= Compile time 
+#================================= Compile time
+
+def defword(name, dict=rDict):
+    def decorator_addword(func):
+        dict[name.lower()]=func
+        return func
+    return decorator_addword
+
+@defword('.s')
+def printStack(cod,p):
+    for d in ds:
+        print(d,end=' ')
 
 def compile() :
     global ds
-    pcode = []; prompt = "Ok " if len(ds)==0 else "Ok: "
+    pcode = []
+    prompt = "{" + str(len(ds)) + "} OK "
     while 1 :
         word = getWord(prompt)  # get next word
         if word == None : return None
@@ -326,12 +353,12 @@ def compile() :
             try : pcode.append(int(word))
             except :
                 try: pcode.append(float(word))
-                except : 
+                except :
                     pcode[-1] = rRun     # Change rPush to rRun
                     pcode.append(word)   # Assume word will be defined
         if not cStack : return pcode
         prompt = "...    "
-    
+
 def fatal (mesg) : raise mesg
 
 def cColon (pcode) :
@@ -442,7 +469,7 @@ cDict = {
   'begin': cBegin, 'until': cUntil,
 'do': cDo, 'loop': cLoop, '+loop' : cLoopPlus, 'i' : cI , 'j' : cJ , 'while' : cWhile, 'repeat' : cRepeat,
 }
-  
+
 if __name__ == "__main__" : main()
 #END
 EXPORT FORTH()

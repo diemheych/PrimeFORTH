@@ -6,20 +6,27 @@ Features include:
 - non-blocking keyboard access
 - floating point support
 - ability to load FORTH files
-  
-Example FORTH files included for N-Queens and a simple graphical game, Snake.
 
-See a demonstration at: https://www.youtube.com/watch?v=ILMbia3-VZo
+Example FORTH files included for N-Queens and a simple graphical game, Snake (see `/examples` folder)
+
+See a demonstration at: [HP Prime runs FORTH in Python - YouTube](https://www.youtube.com/watch?v=ILMbia3-VZo)
 
 # Installation
-Use the HP Connectivity Kit to transfer FORTH.hpprgm to a virtual or physical HP Prime calculator.
+
+Use the HP Connectivity Kit to transfer `FORTH.hpprgm` (in the `/build` folder) to a virtual or physical HP Prime calculator.
 
 Note: the HP Prime must be running firmware that supports Python (actually MicroPython).
+
 # Source
-FORTH.py includes the source code and the PPL wrapper for execution on the HP Prime. The source can be loaded into the HP Connectivity Kit, modified if required, and dragged onto a virtual or physical HP Prime calculator.
+
+`FORTH.py` (in the `/src` folder) includes the source code and the PPL wrapper for execution on the HP Prime. The source can be loaded into the HP Connectivity Kit, modified if required, and dragged onto a virtual or physical HP Prime calculator.
+
 # Examples
+
 To use the example FORTH files (or your own FORTH in a text file with .fth extension), add the files to the Python environment of the HP Prime calculator. In the HP Connectivity Kit, browse to the appropriate calculator, Application Library, Python and Files to see the files already loaded into Python. Right click on Files and select Add File and browse to the text file with .fth extension. Click save and the FORTH file can now be accessed from Prime FORTH with 'list' to view the contents or 'load' to load the file.
+
 # Additional Words
+
 A number of additional words have been included in the FORTH implementation, for example, to provide access to Prime graphics capability.
 
 The additional words are summarised below.
@@ -60,7 +67,9 @@ Graphics commands use Prime pixel co-ordinates where 0,0 is the top left of the 
 Scaled pixel commands double or quadruple the pixel size and similarly scale x and y down by the same amount for virtual screen sizes of 160x120 and 80x60 (for example, Snake game uses pixon4 and getpix4 so the snake and apple are larger and easier to see).
 
 Keycodes for key and lastkey are detailed at: https://en.hpprime.club/docs/reference/GETKEY
-# References
-FORTH Prime is based on: https://www.openbookproject.net/py4fun/forth/forth.html
 
-Snake game is based on: https://skilldrick.github.io/easyforth/#snake
+# References
+
+- FORTH Prime code is based on: https://www.openbookproject.net/py4fun/forth/forth.html
+- Ported to HP Prime micropython by [diemheych](https://github.com/diemheych): [diemheych/PrimeFORTH: A simple version of FORTH written in Python for the HP Prime calculator](https://github.com/diemheych/PrimeFORTH)
+- Snake game is based on: https://skilldrick.github.io/easyforth/#snake
