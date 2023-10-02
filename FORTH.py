@@ -239,7 +239,7 @@ def rImmediate(cod,p) :
     imDict[list(rDict.keys())[-1]] = 1
 
 def rWords(cod,p) :
-    for k in sorted(list(rDict.keys())): print(k,end=' ')
+    for k in sorted(list(rDict.keys())+list(cDict.keys())): print(k,end=' ')
 
 def rCreate (pcode,p) :
     global heapNext, lastCreate
