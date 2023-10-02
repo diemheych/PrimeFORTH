@@ -7,6 +7,8 @@ Features include:
 - ability to load FORTH files
   
 Example FORTH files included for N-Queens and a simple graphical game, Snake.
+
+See a demonstration at: https://www.youtube.com/watch?v=ILMbia3-VZo
 # Installation
 Use the HP Connectivity Kit to transfer FORTH.hpprgm to a virtual or physical HP Prime calculator.
 
