@@ -32,7 +32,10 @@ def main() :
     while True :
         pcode = compile()          # compile/run from user
         if pcode == None : print(""); return
-        execute(pcode)
+        try:
+            execute(pcode)
+        except IndexError:
+            print("Stack empty")
 
 #============================== Lexical Parsing
         
@@ -118,6 +121,8 @@ def rKey (cod,p) :
         if k != -1 : break
 
     ds.append(int(k))
+
+def rInt (cod,p) : ds.append(int(ds.pop()))
 def rTicks (cod,p) : ds.append(int(hpprime.eval("ticks")))
 def rLine (cod,p) : y2=ds.pop(); x2=ds.pop(); y1=ds.pop(); x1=ds.pop(); hpprime.line(0,x1,y1,x2, y2, colour)
 def rRect (cod,p) : h=ds.pop(); w=ds.pop(); y=ds.pop(); x=ds.pop(); hpprime.rect(0,x,y,w, h, colour)
@@ -223,7 +228,7 @@ def rImmediate(cod,p) :
     imDict[list(rDict.keys())[-1]] = 1
 
 def rWords(cod,p) :
-    for k in sorted(list(rDict.keys())): print(k,end=' ')
+    for k in sorted(list(rDict.keys())+list(cDict.keys())): print(k,end=' ')
 
 def rCreate (pcode,p) :
     global heapNext, lastCreate
@@ -266,6 +271,7 @@ rDict = {
 'getpix4' : rGetpix4,
 'key' : rKey,
 'lastkey' : rLastkey,
+'int' : rInt,
 'ticks' : rTicks,
 'line' : rLine,
 'rect' : rRect,
@@ -295,7 +301,6 @@ rDict = {
 '1+' : rOneplus,
 '>r' : rgtR,
 'r>' : rRgt,
-'j' : rJ,
 'type' : rType,
 'word' : rWord,
 'ddump' : rDdump,
