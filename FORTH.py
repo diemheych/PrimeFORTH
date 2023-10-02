@@ -12,12 +12,13 @@
 #   - [diemheych/PrimeFORTH: A simple version of FORTH written in Python for the HP Prime calculator](https://github.com/diemheych/PrimeFORTH)
 #   - [HP Prime runs FORTH in Python - YouTube](https://www.youtube.com/watch?v=ILMbia3-VZo)
 #
+#   2023, Modified: Alexandre Dumont <adumont@gmail.com>
+#
+
 import sys, math
 import hpprime
 import graphic
 import urandom
-
-if sys.version > '3' : raw_input = input  # for both 2.7 and 3.0+
 
 ds       = []          # The data stack
 cStack   = []          # The control struct stack
@@ -48,14 +49,14 @@ def main() :
             print("Stack empty")
 
 #============================== Lexical Parsing
-        
+
 def getWord (prompt="... ") :
     global words, initCode
     while not words :
         try :
             if initCode : lin = initCode; initCode=""
             else        :
-                lin = raw_input(prompt)+" "
+                lin = input(prompt)+" "
                 print(lin)
         except : return None
         tokenizeWords(lin)
