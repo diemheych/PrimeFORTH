@@ -324,7 +324,8 @@ rDict = {
 
 def compile() :
     global ds
-    pcode = []; prompt = "Ok " if len(ds)==0 else "Ok: "
+    pcode = []
+    prompt = "{" + str(len(ds)) + "} OK "
     while 1 :
         word = getWord(prompt)  # get next word
         if word == None : return None
