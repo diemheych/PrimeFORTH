@@ -2,6 +2,16 @@
 #
 #   forth.py
 #
+#   Copyright © 2021 Chris Meyers and Fred Obermann
+#   http://openbookproject.net/py4fun/forth/forth.html
+#
+#   2023, Modified by Darren Hosking, aka. Calculator Clique
+#   Ported to HP Prime, Added many words (math, graphics,...)
+#   License added.
+#   See:
+#   - [diemheych/PrimeFORTH: A simple version of FORTH written in Python for the HP Prime calculator](https://github.com/diemheych/PrimeFORTH)
+#   - [HP Prime runs FORTH in Python - YouTube](https://www.youtube.com/watch?v=ILMbia3-VZo)
+#
 import sys, math
 import hpprime
 import graphic
