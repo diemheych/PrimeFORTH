@@ -131,6 +131,8 @@ def rKey (cod,p) :
         if k != -1 : break
 
     ds.append(int(k))
+
+def rInt (cod,p) : ds.append(int(ds.pop()))
 def rTicks (cod,p) : ds.append(int(hpprime.eval("ticks")))
 def rLine (cod,p) : y2=ds.pop(); x2=ds.pop(); y1=ds.pop(); x1=ds.pop(); hpprime.line(0,x1,y1,x2, y2, colour)
 def rRect (cod,p) : h=ds.pop(); w=ds.pop(); y=ds.pop(); x=ds.pop(); hpprime.rect(0,x,y,w, h, colour)
@@ -279,6 +281,7 @@ rDict = {
 'getpix4' : rGetpix4,
 'key' : rKey,
 'lastkey' : rLastkey,
+'int' : rInt,
 'ticks' : rTicks,
 'line' : rLine,
 'rect' : rRect,
