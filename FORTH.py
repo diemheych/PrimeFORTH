@@ -322,6 +322,13 @@ rDict = {
 }
 #================================= Compile time
 
+def defword(name, dict=rDict):
+    def decorator_addword(func):
+        dict[name.lower()]=func
+        return func
+    return decorator_addword
+
+@word('.s')
 def compile() :
     global ds
     pcode = []
