@@ -27,7 +27,7 @@ The additional words are summarised below.
 - atan: return the arctangent of n (n)
 - circle: draw a circle (x y radius)
 - cls: clears the text and graphics (GROB 0) screens
-- col: set the current colour
+- col: set the current colour (n)
 - cos: return the cosine of n (n)
 - dump: dump contents of stack to terminal window
 - fillrect: draw a filled rectangle (x y w h)
@@ -55,4 +55,4 @@ The additional words are summarised below.
 - sleep: pause program for a number of milliseconds (n)
 
 Graphics commands use Prime pixel co-ordinates where 0,0 is the top left of the screen.
-Scaled pixel commands double or quadruple the pixel size and similarly scale x and y by the same amount (for example, Snake game uses pixon4 and getpix4).
+Scaled pixel commands double or quadruple the pixel size and similarly scale x and y down by the same amount (for example, Snake game uses pixon4 and getpix4).
