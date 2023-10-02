@@ -328,7 +328,11 @@ def defword(name, dict=rDict):
         return func
     return decorator_addword
 
-@word('.s')
+@defword('.s')
+def printStack(cod,p):
+    for d in ds:
+        print(d,end=' ')
+
 def compile() :
     global ds
     pcode = []
