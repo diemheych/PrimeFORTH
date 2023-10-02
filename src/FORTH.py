@@ -12,8 +12,6 @@
 #   - [diemheych/PrimeFORTH: A simple version of FORTH written in Python for the HP Prime calculator](https://github.com/diemheych/PrimeFORTH)
 #   - [HP Prime runs FORTH in Python - YouTube](https://www.youtube.com/watch?v=ILMbia3-VZo)
 #
-#   2023, Modified: Alexandre Dumont <adumont@gmail.com>
-#
 
 import sys, math
 import hpprime
