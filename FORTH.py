@@ -16,10 +16,10 @@ heapNext =  0          # Next avail slot in heap
 words    = []          # The input stream of tokens
 colour   = 0x0000ff
 background = 0xffffff
-initCode = """: cr 10 emit ; : abs dup 0 < if 0 swap - then ; : constant create , does> @ ; : variable create 1 allot ; : +! DUP @ ROT + SWAP ! ; 
-: 2DUP OVER OVER ; : 2DROP DROP DROP ; : NIP SWAP DROP ; : 2NIP 2SWAP 2DROP ; : TUCK SWAP OVER ; 
+initCode = """: cr 10 emit ; : abs dup 0 < if 0 swap - then ; : constant create , does> @ ; : variable create 1 allot ; : +! DUP @ ROT + SWAP ! ;
+: 2DUP OVER OVER ; : 2DROP DROP DROP ; : NIP SWAP DROP ; : 2NIP 2SWAP 2DROP ; : TUCK SWAP OVER ;
  : BL 32 ; : CR 10 EMIT ; : SPACE BL EMIT ; : NEGATE 0 SWAP - ; : DNEGATE 0. 2SWAP D- ; : CELLS CELL * ; : TRUE -1 ; : FALSE 0 ;
- : 0= 0 = ; : 0< 0 < ; : 0> 0 > ; : <= > 0= ; : >= < 0= ; : 0<= 0 <= ; : 0>= 0 >= ; : 1- 1 - ; 
+ : 0= 0 = ; : 0< 0 < ; : 0> 0 > ; : <= > 0= ; : >= < 0= ; : 0<= 0 <= ; : 0>= 0 >= ; : 1- 1 - ;
 : 2+ 2 + ; : 2- 2 - ; : 2/ 2 / ; : 2* 2 * ; : MIN 2DUP < IF DROP ELSE NIP THEN ; : MAX 2DUP > IF DROP ELSE NIP THEN ; : D0= OR 0= ; 1 constant CELL
 """
 
@@ -38,15 +38,15 @@ def main() :
         
 def getWord (prompt="... ") :
     global words, initCode
-    while not words : 
+    while not words :
         try :
             if initCode : lin = initCode; initCode=""
-            else        : 
+            else        :
                 lin = raw_input(prompt)+" "
                 print(lin)
         except : return None
         tokenizeWords(lin)
-        
+
     word = words[0]
     if word == "bye" : return None
     words = words[1:]
@@ -127,9 +127,9 @@ def rCol (cod,p) : global colour ; colour = ds.pop()
 def rGetcol (cod,p) : global colour; ds.append(colour)
 def rBg (cod,p) : global background; background = ds.pop()
 def rShow (cod,p) : graphic.show()
-def rList (cod,p) : 
+def rList (cod,p) :
     fname = getWord()+".fth";
-    try: 
+    try:
         f = open(fname, "r")
         print(f.read(), end=''); f.close()
     except:
@@ -167,7 +167,7 @@ def rHere(cod,p) : ds.append(heapNext)
 def rJmp (cod,p) : return cod[p]
 def rJnz (cod,p) : return (cod[p],p+1)[ds.pop()]
 def rJz  (cod,p) : return (p+1,cod[p])[ds.pop()==0]
-def rRun (cod,p) : 
+def rRun (cod,p) :
     if cod[p] in rDict:
         execute(rDict[cod[p]])
     else:
@@ -303,7 +303,7 @@ rDict = {
 'immediate' : rImmediate,
 'lte' : rLtE,
 }
-#================================= Compile time 
+#================================= Compile time
 
 def compile() :
     global ds
@@ -326,12 +326,12 @@ def compile() :
             try : pcode.append(int(word))
             except :
                 try: pcode.append(float(word))
-                except : 
+                except :
                     pcode[-1] = rRun     # Change rPush to rRun
                     pcode.append(word)   # Assume word will be defined
         if not cStack : return pcode
         prompt = "...    "
-    
+
 def fatal (mesg) : raise mesg
 
 def cColon (pcode) :
@@ -442,7 +442,7 @@ cDict = {
   'begin': cBegin, 'until': cUntil,
 'do': cDo, 'loop': cLoop, '+loop' : cLoopPlus, 'i' : cI , 'j' : cJ , 'while' : cWhile, 'repeat' : cRepeat,
 }
-  
+
 if __name__ == "__main__" : main()
 #END
 EXPORT FORTH()
