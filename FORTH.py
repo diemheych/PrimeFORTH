@@ -42,7 +42,10 @@ def main() :
     while True :
         pcode = compile()          # compile/run from user
         if pcode == None : print(""); return
-        execute(pcode)
+        try:
+            execute(pcode)
+        except IndexError:
+            print("Stack empty")
 
 #============================== Lexical Parsing
         
